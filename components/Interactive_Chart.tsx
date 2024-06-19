@@ -4,6 +4,7 @@ import * as React from "react"
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 import { LabelList, Pie, PieChart } from "recharts"
 import { Area, AreaChart } from "recharts"
+import { Line, LineChart } from "recharts"
 
 import {
     Card,
@@ -59,10 +60,7 @@ export function Interactive_Chart() {
         <Card>
             <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
                 <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-                    {/* <CardTitle>Bar Chart - Interactive</CardTitle>
-                    <CardDescription>
-                        Showing total visitors for the last 3 months
-                    </CardDescription> */}
+                    <CardTitle>Dashboard</CardTitle>
                 </div>
                 <div className="flex">
                     {["desktop", "mobile"].map((key) => {
@@ -85,135 +83,178 @@ export function Interactive_Chart() {
                     })}
                 </div>
             </CardHeader>
-            <CardContent className="px-2 sm:p-6">
-                <ChartContainer
-                    config={chartConfig}
-                    className="aspect-auto h-[250px] w-full"
-                >
-                    <BarChart
-                        accessibilityLayer
-                        data={chartData}
-                        margin={{
-                            left: 12,
-                            right: 12,
-                        }}
+            <CardContent className="px-2 sm:p-6 grid grid-cols-12">
+                <div className="col-span-3">
+                    <ChartContainer
+                        config={chartConfig}
+                        className="aspect-auto h-[250px] w-full"
                     >
-                        <CartesianGrid vertical={false} />
-                        <XAxis
-                            dataKey="date"
-                            tickLine={false}
-                            axisLine={false}
-                            tickMargin={8}
-                            minTickGap={32}
-                            tickFormatter={(value) => {
-                                const date = new Date(value)
-                                return date.toLocaleDateString("en-US", {
-                                    month: "short",
-                                    day: "numeric",
-                                })
+                        <BarChart
+                            accessibilityLayer
+                            data={chartData}
+                            margin={{
+                                left: 12,
+                                right: 12,
                             }}
-                        />
-                        <ChartTooltip
-                            content={
-                                <ChartTooltipContent
-                                    className="w-[150px]"
-                                    nameKey="views"
-                                    labelFormatter={(value) => {
-                                        return new Date(value).toLocaleDateString("en-US", {
-                                            month: "short",
-                                            day: "numeric",
-                                            year: "numeric",
-                                        })
-                                    }}
-                                />
-                            }
-                        />
-                        <Bar dataKey={activeChart} fill={`var(--color-${activeChart})`} />
-                    </BarChart>
-                </ChartContainer>
-                <ChartContainer
-                    config={chartConfig}
-                    className="mx-auto aspect-square max-h-[250px]"
-                >
-                    <PieChart>
-                        <ChartTooltip
-                            content={<ChartTooltipContent nameKey="visitors" hideLabel />}
-                        />
-                        <Pie data={chartData} dataKey={activeChart}>
-                            <LabelList
-                                dataKey="browser"
-                                className="fill-background"
-                                stroke="none"
-                                fontSize={12}
-                                formatter={(value: keyof typeof chartConfig) =>
-                                    chartConfig[value]?.label
+                        >
+                            <CartesianGrid vertical={false} />
+                            <XAxis
+                                dataKey="date"
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={8}
+                                minTickGap={32}
+                                tickFormatter={(value) => {
+                                    const date = new Date(value)
+                                    return date.toLocaleDateString("en-US", {
+                                        month: "short",
+                                        day: "numeric",
+                                    })
+                                }}
+                            />
+                            <ChartTooltip
+                                content={
+                                    <ChartTooltipContent
+                                        className="w-[150px]"
+                                        nameKey="views"
+                                        labelFormatter={(value) => {
+                                            return new Date(value).toLocaleDateString("en-US", {
+                                                month: "short",
+                                                day: "numeric",
+                                                year: "numeric",
+                                            })
+                                        }}
+                                    />
                                 }
                             />
-                        </Pie>
-                    </PieChart>
-                </ChartContainer>
-                <ChartContainer config={chartConfig}>
-                    <AreaChart
-                        accessibilityLayer
-                        data={chartData}
-                        margin={{
-                            left: 12,
-                            right: 12,
-                        }}
+                            <Bar dataKey={activeChart} fill={`var(--color-${activeChart})`} />
+                        </BarChart>
+                    </ChartContainer>
+                </div>
+                <div className="cols-span-3">
+                    <ChartContainer
+                        config={chartConfig}
+                        className="mx-auto aspect-square max-h-[250px]"
                     >
-                        <CartesianGrid vertical={false} />
-                        <XAxis
-                            dataKey="month"
-                            tickLine={false}
-                            axisLine={false}
-                            tickMargin={8}
-                            tickFormatter={(value) => value.slice(0, 3)}
-                        />
-                        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-                        <defs>
-                            <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
-                                <stop
-                                    offset="5%"
-                                    stopColor="var(--color-desktop)"
-                                    stopOpacity={0.8}
+                        <PieChart>
+                            <ChartTooltip
+                                content={<ChartTooltipContent nameKey="visitors" hideLabel />}
+                            />
+                            <Pie data={chartData} dataKey={activeChart}>
+                                <LabelList
+                                    dataKey="browser"
+                                    className="fill-background"
+                                    stroke="none"
+                                    fontSize={12}
+                                    formatter={(value: keyof typeof chartConfig) =>
+                                        chartConfig[value]?.label
+                                    }
                                 />
-                                <stop
-                                    offset="95%"
-                                    stopColor="var(--color-desktop)"
-                                    stopOpacity={0.1}
-                                />
-                            </linearGradient>
-                            <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-                                <stop
-                                    offset="5%"
-                                    stopColor="var(--color-mobile)"
-                                    stopOpacity={0.8}
-                                />
-                                <stop
-                                    offset="95%"
-                                    stopColor="var(--color-mobile)"
-                                    stopOpacity={0.1}
-                                />
-                            </linearGradient>
-                        </defs>
-                        <Area
-                            dataKey="mobile"
-                            type="natural"
-                            fill="url(#fillMobile)"
-                            fillOpacity={0.4}
-                            stroke="var(--color-mobile)"
-                            stackId="a"
-                        />
-                        <Area
-                            dataKey="desktop"
-                            type="natural"
-                            fill="url(#fillDesktop)"
-                            fillOpacity={0.4}
-                            stroke="var(--color-desktop)"
-                            stackId="a"
-                        />
-                    </AreaChart>
-                </ChartContainer>
+                            </Pie>
+                        </PieChart>
+                    </ChartContainer>
+                </div>
+                <div className="col-span-3">
+                    <ChartContainer config={chartConfig}>
+                        <AreaChart
+                            accessibilityLayer
+                            data={chartData}
+                            margin={{
+                                left: 12,
+                                right: 12,
+                            }}
+                        >
+                            <CartesianGrid vertical={false} />
+                            <XAxis
+                                dataKey="month"
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={8}
+                                tickFormatter={(value) => value.slice(0, 3)}
+                            />
+                            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                            <defs>
+                                <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+                                    <stop
+                                        offset="5%"
+                                        stopColor="var(--color-desktop)"
+                                        stopOpacity={0.8}
+                                    />
+                                    <stop
+                                        offset="95%"
+                                        stopColor="var(--color-desktop)"
+                                        stopOpacity={0.1}
+                                    />
+                                </linearGradient>
+                                <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
+                                    <stop
+                                        offset="5%"
+                                        stopColor="var(--color-mobile)"
+                                        stopOpacity={0.8}
+                                    />
+                                    <stop
+                                        offset="95%"
+                                        stopColor="var(--color-mobile)"
+                                        stopOpacity={0.1}
+                                    />
+                                </linearGradient>
+                            </defs>
+                            <Area
+                                dataKey="mobile"
+                                type="natural"
+                                fill="url(#fillMobile)"
+                                fillOpacity={0.4}
+                                stroke="var(--color-mobile)"
+                                stackId="a"
+                            />
+                            <Area
+                                dataKey="desktop"
+                                type="natural"
+                                fill="url(#fillDesktop)"
+                                fillOpacity={0.4}
+                                stroke="var(--color-desktop)"
+                                stackId="a"
+                            />
+                        </AreaChart>
+                    </ChartContainer>
+                </div>
+                <div className="col-span-3">
+                    <ChartContainer config={chartConfig}>
+                        <LineChart
+                            accessibilityLayer
+                            data={chartData}
+                            margin={{
+                                left: 12,
+                                right: 12,
+                            }}
+                        >
+                            <CartesianGrid vertical={false} />
+                            <XAxis
+                                dataKey="month"
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={8}
+                                tickFormatter={(value) => value.slice(0, 3)}
+                            />
+                            <ChartTooltip
+                                cursor={false}
+                                content={<ChartTooltipContent hideLabel />}
+                            />
+                            <Line
+                                dataKey="desktop"
+                                type="natural"
+                                stroke="var(--color-desktop)"
+                                strokeWidth={2}
+                                dot={{
+                                    fill: "var(--color-desktop)",
+                                }}
+                                activeDot={{
+                                    r: 6,
+                                }}
+                            />
+                        </LineChart>
+                    </ChartContainer>
+                </div>
             </CardContent>
         </Card>
     )
